@@ -1,20 +1,15 @@
 {
   description = "nix-index database";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
   outputs =
     { self, nixpkgs, ... }:
     let
       inherit (nixpkgs) lib;
 
-      testSystems = [
+      systems = [
         "x86_64-linux"
-        "aarch64-linux"
-      ];
-
-      systems = testSystems ++ [
-        "aarch64-darwin"
       ];
 
       mkPackages = pkgs: import ./default.nix { inherit pkgs; };
@@ -58,7 +53,7 @@
         nix-index = ./nixos-module.nix;
       };
 
-      checks = lib.genAttrs testSystems (
+      checks = lib.genAttrs systems (
         system:
         import ./tests.nix {
           inherit system nixpkgs;
